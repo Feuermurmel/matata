@@ -1,7 +1,7 @@
 import setuptools
 
 name = 'matata'
-dependencies = []
+dependencies = ['requests']
 dependencies_dev = []
 console_scripts = ['matata = matata:entry_point']
 
