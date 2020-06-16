@@ -10,6 +10,13 @@ class TimeSheetEntry(NamedTuple):
     start_time: datetime.time
     end_time: datetime.time
 
+    def __repr__(self):
+        date_str = self.date.isoformat()
+        start_time = self.start_time.isoformat('minutes')
+        end_time = self.end_time.isoformat('minutes')
+
+        return f'TimeSheetEntry({date_str}, {start_time}, {end_time})'
+
 
 class TimeSheet(NamedTuple):
     entries: List[TimeSheetEntry]

@@ -44,7 +44,7 @@ def main(site, api_key, time_sheet):
             # ones missing from Hakuna.
             time_sheet_entry_set.remove(time_sheet_entry)
         else:
-            log(f'Deleting entry: {i}')
+            log(f'Deleting entry: {time_sheet_entry}')
 
             # Remote entries we don't have in the local time sheet from Hakuna.
             api.delete_time_entry(i.id)
