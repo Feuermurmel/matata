@@ -3,7 +3,9 @@ import setuptools
 name = 'matata'
 dependencies = ['requests']
 dependencies_dev = []
-console_scripts = ['matata = matata:entry_point']
+console_scripts = [
+    'matata = matata:main',
+    'matata-date-list = matata:date_list_main']
 
 setuptools.setup(
     name=name,

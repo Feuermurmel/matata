@@ -24,6 +24,24 @@ def time_sheet_entry_from_hakuna_entry(entry: TimeEntry):
     return TimeSheetEntry(entry.date, entry.start_time, entry.end_time)
 
 
+def entry_point(parse_args_fn):
+    def decorator(main_fn):
+        def wrapped_fn():
+            try:
+                main_fn(**vars(parse_args_fn()))
+            except KeyboardInterrupt:
+                log('Operation interrupted.')
+                sys.exit(1)
+            except UserError as e:
+                log(f'error: {e}')
+                sys.exit(2)
+
+        return wrapped_fn
+
+    return decorator
+
+
+@entry_point(parse_args)
 def main(site, api_key, time_sheet):
     ts = timesheet.read_time_sheet(time_sheet)
     time_sheet_entry_set = set(ts.entries)
@@ -55,12 +73,14 @@ def main(site, api_key, time_sheet):
         api.create_time_entry(i.date, i.start_time, i.end_time, task_id=1)
 
 
-def entry_point():
-    try:
-        main(**vars(parse_args()))
-    except KeyboardInterrupt:
-        log('Operation interrupted.')
-        sys.exit(1)
-    except UserError as e:
-        log(f'error: {e}')
-        sys.exit(2)
+@entry_point(lambda: argparse.ArgumentParser().parse_args())
+def date_list_main():
+    today = datetime.date.today()
+
+    for i in range(1000):
+        date = today + datetime.timedelta(days=i)
+
+        if date.isoweekday() == 7:
+            print()
+        elif date.isoweekday() != 6:
+            print(date.isoformat())
