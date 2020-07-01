@@ -2,8 +2,6 @@ import argparse
 import datetime
 import pathlib
 import sys
-from collections import defaultdict
-from typing import List
 
 from matata.hakuna import API, TimeEntry
 from matata.timesheet import read_time_sheet, TimeSheetEntry
@@ -43,14 +41,15 @@ def entry_point(parse_args_fn):
 
 @entry_point(parse_args)
 def main(site, api_key, time_sheet):
-    ts = timesheet.read_time_sheet(time_sheet)
-    time_sheet_entry_set = set(ts.entries)
+    api = API(site, api_key)
 
-    # 31 Days, at least one month.
+    # 31 Days (range is inclusive), at least one month.
     end_date = datetime.date.today()
     start_date = end_date - datetime.timedelta(days=30)
 
-    api = API(site, api_key)
+    ts = timesheet.read_time_sheet(time_sheet)
+    time_sheet_entry_set = \
+        set(i for i in ts.entries if start_date <= i.date <= end_date)
 
     existing_hakuna_entries = api.list_time_entries(start_date, end_date)
 
