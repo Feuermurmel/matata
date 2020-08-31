@@ -12,7 +12,7 @@ class TimeEntry(NamedTuple):
     end_time: datetime.time
 
 
-class API():
+class API:
     def __init__(self, site_url: str, api_token: str):
         self.site_url = site_url
         self.api_token = api_token

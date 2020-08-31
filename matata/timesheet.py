@@ -1,6 +1,6 @@
 import datetime
 import pathlib
-from typing import List, NamedTuple, Optional
+from typing import List, NamedTuple
 
 from matata.util import log
 
@@ -52,6 +52,3 @@ def read_time_sheet(path: pathlib.Path):
                         yield TimeSheetEntry(date, _parse_time(start_str), _parse_time(end_str))
 
     return TimeSheet(list(iter_entries()))
-
-
-
