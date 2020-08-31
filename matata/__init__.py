@@ -53,7 +53,7 @@ def main(site, api_key, time_sheet):
 
     existing_hakuna_entries = api.list_time_entries(start_date, end_date)
 
-    for i in existing_hakuna_entries:
+    for i in sorted(existing_hakuna_entries):
         time_sheet_entry = time_sheet_entry_from_hakuna_entry(i)
 
         if time_sheet_entry in time_sheet_entry_set:
@@ -66,7 +66,7 @@ def main(site, api_key, time_sheet):
             # Remote entries we don't have in the local time sheet from Hakuna.
             api.delete_time_entry(i.id)
 
-    for i in time_sheet_entry_set:
+    for i in sorted(time_sheet_entry_set):
         log(f'Creating entry: {i}')
 
         api.create_time_entry(i.date, i.start_time, i.end_time, task_id=1)
