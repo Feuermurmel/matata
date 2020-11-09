@@ -13,6 +13,7 @@ def parse_args():
 
     parser.add_argument('--site')
     parser.add_argument('--api-key')
+    parser.add_argument('--num-past-days', type=int, default=30)
     parser.add_argument('time_sheet', type=pathlib.Path)
 
     return parser.parse_args()
@@ -40,12 +41,12 @@ def entry_point(parse_args_fn):
 
 
 @entry_point(parse_args)
-def main(site, api_key, time_sheet):
+def main(site, api_key, num_past_days, time_sheet):
     api = API(site, api_key)
 
     # 31 Days (range is inclusive), at least one month.
     end_date = datetime.date.today()
-    start_date = end_date - datetime.timedelta(days=30)
+    start_date = end_date - datetime.timedelta(days=num_past_days)
 
     ts = timesheet.read_time_sheet(time_sheet)
     time_sheet_entry_set = \
