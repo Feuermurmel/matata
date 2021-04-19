@@ -75,12 +75,13 @@ def main(site, api_key, num_past_days, time_sheet):
 
 @entry_point(lambda: argparse.ArgumentParser().parse_args())
 def date_list_main():
-    today = datetime.date.today()
+    start = datetime.date.today()
+    start -= datetime.timedelta(start.weekday())
+    
+    for i in range(100):
+        day = start + datetime.timedelta(days=i)
 
-    for i in range(1000):
-        date = today + datetime.timedelta(days=i)
+        print(f'{day}  ')
 
-        if date.isoweekday() == 7:
+        if day.weekday() == 6:
             print()
-        elif date.isoweekday() != 6:
-            print(date.isoformat())
