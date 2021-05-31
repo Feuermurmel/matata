@@ -78,7 +78,7 @@ def date_list_main():
     start = datetime.date.today()
     start -= datetime.timedelta(start.weekday())
     
-    for i in range(100):
+    for i in range(7 * 52):
         day = start + datetime.timedelta(days=i)
 
         print(f'{day}  ')
