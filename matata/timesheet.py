@@ -1,8 +1,9 @@
 import datetime
 import pathlib
+import re
 from typing import List, NamedTuple
 
-from matata.util import log
+from matata.util import log, UserError
 
 
 class TimeSheetEntry(NamedTuple):
@@ -23,11 +24,27 @@ class TimeSheet(NamedTuple):
 
 
 def _parse_time(time_str):
-    seconds = round(float(time_str) * 3600)
-    minutes, seconds = divmod(seconds, 60)
-    hours, minutes = divmod(minutes, 60)
+    match = re.fullmatch(
+        '(?P<hour>[0-9]+)'
+        '(\\.(?P<decihour>[0-9])|:(?P<minute>[0-9]{2}))?',
+        time_str)
 
-    return datetime.time(hours, minutes, seconds)
+    if not match:
+        raise UserError(f'Invalid time specification: {time_str}')
+
+    hour = int(match.group('hour'))
+
+    decihour_str = match.group('decihour')
+    minute_str = match.group('minute')
+
+    if decihour_str:
+        minute = int(decihour_str) * 6
+    elif minute_str:
+        minute = int(minute_str)
+    else:
+        minute = 0
+
+    return datetime.time(hour, minute)
 
 
 def read_time_sheet(path: pathlib.Path):
