@@ -44,7 +44,6 @@ def entry_point(parse_args_fn):
 def main(site, api_key, num_past_days, time_sheet):
     api = API(site, api_key)
 
-    # 31 Days (range is inclusive), at least one month.
     end_date = datetime.date.today()
     start_date = end_date - datetime.timedelta(days=num_past_days)
 
@@ -77,7 +76,7 @@ def main(site, api_key, num_past_days, time_sheet):
 def date_list_main():
     start = datetime.date.today()
     start -= datetime.timedelta(start.weekday())
-    
+
     for i in range(7 * 52):
         day = start + datetime.timedelta(days=i)
 
